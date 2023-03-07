@@ -11,6 +11,7 @@ TESTER_CLASS="$3"
 mkdir ~/jar-runner/
 cp "${TESTS}/artifacts/"* "${HOME}/jar-runner/"
 cp "${TESTS}/lib/"* "${HOME}/jar-runner/"
+cp -r "${TESTS}/modules/info.kgeorgiy.java.advanced.${PACKAGE}/"* "${HOME}/jar-runner/"
 mkdir -p "${HOME}/jar-runner/info/kgeorgiy/ja/${SURNAME}/${PACKAGE}/"
 cp "${SOLUTIONS}/java-solutions/info/kgeorgiy/ja/${SURNAME}/${PACKAGE}/"* "${HOME}/jar-runner/info/kgeorgiy/ja/${SURNAME}/${PACKAGE}/"
 
