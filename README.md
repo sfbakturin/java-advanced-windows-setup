@@ -58,12 +58,12 @@
 
     ```bash
     sudo apt update
-    sudo apt upgade -y
+    sudo apt upgrade -y
     sudo apt install openjdk-17-jdk-headless
     ```
 
-4. Создадим два скрипта [start_wsl_impl.sh](start_wsl_impl.sh) и [start_wsl.bat](start_wsl.bat). В [`start_wsl.bat`](start_wsl.bat) мы запускаем через WSL скрипт [`start_wsl_impl.sh`](start_wsl_impl.sh) и передаём три аргумента, переданные ему. Уже в WSL мы исполняем код в скрипте. Этот скрипт в IDEA запускается в терминале и не требует дальнейшего нажатия Enter, как было выше. Действия аналогичны.
+4. Создадим два скрипта [`start_wsl_impl.sh`](start_wsl_impl.sh) и [`start_wsl.bat`](start_wsl.bat). В втором скрипте мы запускаем через WSL первый скрипт и передаём три аргумента, переданные ему. Уже в окружении WSL мы исполняем код в скрипте. Этот скрипт в IDEA запускается в терминале и не требует дальнейшего нажатия Enter, как было выше. Действия аналогичны.
 
-5. Теперь в конфигурациях запусков мы добавим `JarWalkTestWSL`
-    * в `Script path` укажем путь к `start_wsl.bat`;
-    * в `Script options` укажем те же аргументы, что и при `JarWalkTest`.
+5. Зайдем в конфигурации запуска в Intellij IDEA и добавим новый `Shell Script`, именуем его как `JarWalkTestWSL`
+    * в `Script path` укажем путь к нашему [`start_wsl.bat`](start_wsl.bat);
+    * в `Script options` укажем следующие параметры: *пакет, в котором лежат решение и тесты*; *наименование класса решения*; *наименование класса тестера*.
