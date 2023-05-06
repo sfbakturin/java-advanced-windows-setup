@@ -1,3 +1,3 @@
 @echo off
 
-bash start_wsl_impl.sh "%1" "%2" "%3"
+bash start.sh "%1" "%2" "%3" "%4"
