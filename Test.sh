@@ -15,14 +15,9 @@ PACKAGE_TESTS="$2"
 CLASS_SOLUTIONS="$3"
 CLASS_TESTS="$4"
 
-if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" || "${OSTYPE}" == "freebsd"* || "${OSTYPE}" == "darwin"* ]]
-then
-  SOURCE=""
-fi
-
 if grep -qi microsoft /proc/version; then
   SOURCE="${PWD}/"
-  cd ~ || exit
+  cd ~ || exit 1
 else
   SOURCE=""
 fi
@@ -33,11 +28,9 @@ mkdir "${PATH_RUNNER_CURRENT}"/
 cp "${SOURCE}${TESTS}/artifacts/"* "${PATH_RUNNER_CURRENT}/"
 cp "${SOURCE}${TESTS}/lib/"* "${PATH_RUNNER_CURRENT}/"
 
-# shellcheck disable=SC2010
-# TODO: rewrite that sh*t
-for MODULE in $(ls "${SOURCE}${TESTS}/modules/" | grep -e "info*")
+for MODULE in "${SOURCE}${TESTS}"/modules/*
 do
-  cp -r "${SOURCE}${TESTS}/modules/${MODULE}/"* "${PATH_RUNNER_CURRENT}/"
+  cp -r "${MODULE}/"* "${PATH_RUNNER_CURRENT}/"
 done
 
 mkdir -p "${PATH_RUNNER_CURRENT}/info/kgeorgiy/ja/${LAST_NAME}/${PACKAGE_SOLUTIONS}/"
@@ -58,9 +51,7 @@ fi
 javac -encoding utf8 -classpath "${LIBRARY}" info/kgeorgiy/java/advanced/base/*.java info/kgeorgiy/java/advanced/"${PACKAGE_TESTS}"/*.java info/kgeorgiy/java/advanced/"${PACKAGE_SOLUTIONS}"/*.java info/kgeorgiy/ja/"${LAST_NAME}"/"${PACKAGE_SOLUTIONS}"/*.java
 java -Dfile.encoding=UTF-8 -cp . -p . -m info.kgeorgiy.java.advanced."${PACKAGE_TESTS}" "${CLASS_TESTS}" info.kgeorgiy.ja."${LAST_NAME}"."${PACKAGE_SOLUTIONS}"."${CLASS_SOLUTIONS}"
 
-# TODO: rewrite it to something more smarter
-cd ..
-cd ..
+cd ../..
 
 if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" ]]
 then
