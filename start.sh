@@ -1,64 +1,70 @@
 #!/bin/bash
 
-REAL_PATH=""
-LIBS=""
+SOURCE=""
+LIBRARY=""
 
-SOLUTIONS="solutions"
-TESTS="tests"
-SURNAME="__last_name__"
+PATH_RUNNER="jar-runner"
+PATH_RUNNER_CURRENT="${PATH_RUNNER}/$(date '+%d-%m-%Y_%H-%M-%S')"
+
+SOLUTIONS="__solutions__"
+TESTS="__tests__"
+LAST_NAME="__last_name__"
 
 PACKAGE_SOLUTIONS="$1"
 PACKAGE_TESTS="$2"
 CLASS_SOLUTIONS="$3"
 CLASS_TESTS="$4"
 
-# Windows Git Bash
-if [[ "${OSTYPE}" == "msys" ]]
+if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" || "${OSTYPE}" == "freebsd"* || "${OSTYPE}" == "darwin"* ]]
 then
-  REAL_PATH=""
+  SOURCE=""
 fi
 
-# Linux (WSL)
-if [[ "${OSTYPE}" == "linux-gnu"* ]]
-then
-  REAL_PATH="${PWD}/"
+if grep -qi microsoft /proc/version; then
+  SOURCE="${PWD}/"
   cd ~ || exit
+else
+  SOURCE=""
 fi
 
-[[ ! -d jar-runner/ ]] && mkdir jar-runner/
+[[ ! -d "${PATH_RUNNER}"/ ]] && mkdir "${PATH_RUNNER}"/
+mkdir "${PATH_RUNNER_CURRENT}"/
 
-cp "${REAL_PATH}${TESTS}/artifacts/"* "jar-runner/"
-cp "${REAL_PATH}${TESTS}/lib/"* "jar-runner/"
-cp -r "${REAL_PATH}${TESTS}/modules/info.kgeorgiy.java.advanced.base/"* "jar-runner/"
-cp -r "${REAL_PATH}${TESTS}/modules/info.kgeorgiy.java.advanced.${PACKAGE_SOLUTIONS}/"* "jar-runner/"
-cp -r "${REAL_PATH}${TESTS}/modules/info.kgeorgiy.java.advanced.${PACKAGE_TESTS}/"* "jar-runner/"
+cp "${SOURCE}${TESTS}/artifacts/"* "${PATH_RUNNER_CURRENT}/"
+cp "${SOURCE}${TESTS}/lib/"* "${PATH_RUNNER_CURRENT}/"
 
-mkdir -p "jar-runner/info/kgeorgiy/ja/${SURNAME}/${PACKAGE_SOLUTIONS}/"
+# shellcheck disable=SC2010
+# TODO: rewrite that sh*t
+for MODULE in $(ls "${SOURCE}${TESTS}/modules/" | grep -e "info*")
+do
+  cp -r "${SOURCE}${TESTS}/modules/${MODULE}/"* "${PATH_RUNNER_CURRENT}/"
+done
 
-cp "${REAL_PATH}${SOLUTIONS}/java-solutions/info/kgeorgiy/ja/${SURNAME}/${PACKAGE_SOLUTIONS}/"* "jar-runner/info/kgeorgiy/ja/${SURNAME}/${PACKAGE_SOLUTIONS}"
+mkdir -p "${PATH_RUNNER_CURRENT}/info/kgeorgiy/ja/${LAST_NAME}/${PACKAGE_SOLUTIONS}/"
+cp "${SOURCE}${SOLUTIONS}/java-solutions/info/kgeorgiy/ja/${LAST_NAME}/${PACKAGE_SOLUTIONS}/"* "${PATH_RUNNER_CURRENT}/info/kgeorgiy/ja/${LAST_NAME}/${PACKAGE_SOLUTIONS}"
 
-cd jar-runner || exit
+cd "${PATH_RUNNER_CURRENT}" || exit
 
-# Windows Git Bash
-if [[ "${OSTYPE}" == "msys" ]]
+if [[ "${OSTYPE}" == "linux-gnu"* || "${OSTYPE}" == "darwin"* || "${OSTYPE}" == "freebsd"* ]]
 then
-  LIBS="junit-4.11.jar;jsoup-1.8.1.jar;hamcrest-core-1.3.jar;quickcheck-0.6.jar;./info/kgeorgiy/java/advanced/${PACKAGE_TESTS}/;./info/kgeorgiy/java/advanced/${PACKAGE_SOLUTIONS}/;."
+  LIBRARY="junit-4.11.jar:jsoup-1.8.1.jar:hamcrest-core-1.3.jar:quickcheck-0.6.jar:./info/kgeorgiy/java/advanced/${PACKAGE_TESTS}/:./info/kgeorgiy/java/advanced/${PACKAGE_SOLUTIONS}/:."
 fi
 
-# Linux (WSL)
-if [[ "${OSTYPE}" == "linux-gnu" ]]
+if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" ]]
 then
-  LIBS="junit-4.11.jar:jsoup-1.8.1.jar:hamcrest-core-1.3.jar:quickcheck-0.6.jar:./info/kgeorgiy/java/advanced/${PACKAGE_TESTS}/:./info/kgeorgiy/java/advanced/${PACKAGE_SOLUTIONS}/:."
+  LIBRARY="junit-4.11.jar;jsoup-1.8.1.jar;hamcrest-core-1.3.jar;quickcheck-0.6.jar;./info/kgeorgiy/java/advanced/${PACKAGE_TESTS}/;./info/kgeorgiy/java/advanced/${PACKAGE_SOLUTIONS}/;."
 fi
 
-javac -encoding utf8 -verbose -classpath "${LIBS}" info/kgeorgiy/java/advanced/base/*.java info/kgeorgiy/java/advanced/"${PACKAGE_TESTS}"/*.java info/kgeorgiy/java/advanced/"${PACKAGE_SOLUTIONS}"/*.java info/kgeorgiy/ja/"${SURNAME}"/"${PACKAGE_SOLUTIONS}"/*.java
-java -Dfile.encoding=UTF-8 -cp . -p . -m info.kgeorgiy.java.advanced."${PACKAGE_TESTS}" "${CLASS_TESTS}" info.kgeorgiy.ja."${SURNAME}"."${PACKAGE_SOLUTIONS}"."${CLASS_SOLUTIONS}"
+javac -encoding utf8 -classpath "${LIBRARY}" info/kgeorgiy/java/advanced/base/*.java info/kgeorgiy/java/advanced/"${PACKAGE_TESTS}"/*.java info/kgeorgiy/java/advanced/"${PACKAGE_SOLUTIONS}"/*.java info/kgeorgiy/ja/"${LAST_NAME}"/"${PACKAGE_SOLUTIONS}"/*.java
+java -Dfile.encoding=UTF-8 -cp . -p . -m info.kgeorgiy.java.advanced."${PACKAGE_TESTS}" "${CLASS_TESTS}" info.kgeorgiy.ja."${LAST_NAME}"."${PACKAGE_SOLUTIONS}"."${CLASS_SOLUTIONS}"
 
+# TODO: rewrite it to something more smarter
+cd ..
 cd ..
 
-# Windows Git Bash
-if [[ "${OSTYPE}" == "msys" ]]
+if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" ]]
 then
+  # shellcheck disable=SC2162
   read
   exit
 fi
