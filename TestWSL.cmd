@@ -1,3 +1,3 @@
 @echo off
 
-bash start.sh "%1" "%2" "%3" "%4"
+bash Test.sh "%1" "%2" "%3" "%4"
