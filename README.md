@@ -17,41 +17,50 @@
     4. В **Build system** выставим `Intellij`.
     5. Снимем галочку с `Add sample code`.
     6. В созданном проекте удалим директорию `src/`.
+    ![alt text](resources/project-setup.png)
 3. Склонируйте Git-репозитории.
     1. Зайдите в директорию проекта.
     2. C командной строки склонируем Git-репозиторий с тестами и персональный репозиторий.
     3. Для удобства переименуем репозиторий с тестам в `tests/`, персональный же - `solutions/`.
+    ![alt text](resources/project-structure.png)
 4. Пометьте директории проекта.
     1. Директорию `tests/lib/` пометьте как *Resources Root*.
+    ![alt text](resources/resources-root.png)
     2. Директорию `solutions/java-solutions/` пометьте как *Sources Root*.
 5. Импортируйте библиотеку и модули.
     1. Зайдите в структуру проекта (`File` -> `Project Structure...`).
     2. Во вкладке `Project Settings` выберите `Libraries`.
         1. Нажмите на плюсик.
         2. В появившемся окне нажмите `Java`.
+        ![alt text](resources/add-library.png)
         3. Выберите директорию `tests/lib/`.
         4. В появившемся окне нажмите `OK`.
+        ![alt text](resources/add-to-module.png)
     3. Во вкладке `Project Settings` выберите `Modules`.
         1. Выберите под наименованием модуля `Dependencies`.
         2. Нажмите на верхний плюсик.
         3. В появившемся окне нажмите `Import Module`.
+        ![alt text](resources/import-module.png)
         4. Выберите директорию `tests/modules/info.kgeorgiy.java.advanced.base`.
         5. В появляющихся окнах подтверждаем создание.
-        6. Добавим еще один модуль, также повторим действия пунктов **1**-**4** и выберем директорию `tests/modules/info.kgeorgiy.java.advanced.walk`.
+        6. Добавим еще один модуль, также повторим действия пунктов **`1`**-**`5`** и выберем директорию `tests/modules/info.kgeorgiy.java.advanced.walk`.
     4. Все остальные модули добавляются также по пункту **`3`**.
 6. Настройте зависимости модулей.
     1. Настройте базовый модуль.
         1. Выберите модуль `info.kgeorgiy.java.advanced.base`.
         2. В окне правее нажмем плюсик.
         3. В появившемся окне нажмите `Library`.
+        ![alt text](resources/set-dependencies-lib.png)
         4. Далее выберите добавленный ранее `lib`.
     2. Настройте модуль первого домашнего задания.
         1. Выберите модуль `info.kgeorgiy.java.advanced.walk`. Для него проделаем те же действия, что и для модуля `info.kgeorgiy.java.advanced.base`.
         2. Нажмите снова на плюсик и выберите `Module Dependency...`.
+        ![alt text](resources/set-dependencies-module.png)
         3. В появившемся окне выберите модуль `info.kgeorgiy.java.advanced.base`.
     3. Настройте общий модуль.
         1. Выберите модуль `java-advanced`.
         2. Добавьте в зависимости все существующие модули, кроме модуля `info.kgeorgiy.java.advanced.base`, иначе будут проблемы при компиляции.
+        ![alt text](resources/set-dependencies-java-advanced-lib.png)
     4. Все остальные модули добавляются также по пункту **`2`** и **`3`**. *Обратите внимание*: для некоторых домашних заданий/модулей понадобятся другие модули, помимо `info.kgeorgiy.java.advanced.base`.
 7. Добавьте конфигурацию запуска.
     1. В поле **Name** зададим *ClassWalkTestWindows*, где префикс *Class* означает, что мы компилируем и запускаем тесты через классы; *WalkTest* - версию домашнего задания (easy/hard/bonus); суффикс *Windows* - тестирование проходит на Windows.
@@ -59,6 +68,8 @@
     3. В поле `-cp <no module>` выберем модуль `java-advanced`.
     4. В поле **Main class** мы положим полное название класса тестирования, например, *info.kgeorgiy.java.advanced.walk.Tester*.
     5. В поле **Program arguments** мы положим первым аргументом версию домашнего задания, вторым - полное название разработанного класса, например, *Walk info.kgeorgiy.ja.bakturin.walk.Walk*.
+
+    ![alt text](resources/class-windows.png)
 
 ## Компиляция на Windows и запуск через классы на Ubuntu
 
