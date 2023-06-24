@@ -2,9 +2,16 @@
 
 SOURCE=""
 LIBRARY=""
+LEN=$#
 
 PATH_RUNNER="jar-runner"
-PATH_RUNNER_CURRENT="${PATH_RUNNER}/$(date '+%d-%m-%Y_%H-%M-%S')"
+PATH_RUNNER_CURRENT=""
+
+if [[ "$LEN" -eq 5 && ("${5}" == "--no-copy" || "${5}" == "-nc") ]]; then
+  PATH_RUNNER_CURRENT="${PATH_RUNNER}"
+else
+  PATH_RUNNER_CURRENT="${PATH_RUNNER}/$(date '+%d-%m-%Y_%H-%M-%S')"
+fi
 
 SOLUTIONS="__solutions__"
 TESTS="__tests__"
@@ -51,7 +58,11 @@ fi
 javac -encoding utf8 -classpath "${LIBRARY}" info/kgeorgiy/java/advanced/base/*.java info/kgeorgiy/java/advanced/"${PACKAGE_TESTS}"/*.java info/kgeorgiy/java/advanced/"${PACKAGE_SOLUTIONS}"/*.java info/kgeorgiy/ja/"${LAST_NAME}"/"${PACKAGE_SOLUTIONS}"/*.java
 java -Dfile.encoding=UTF-8 -cp . -p . -m info.kgeorgiy.java.advanced."${PACKAGE_TESTS}" "${CLASS_TESTS}" info.kgeorgiy.ja."${LAST_NAME}"."${PACKAGE_SOLUTIONS}"."${CLASS_SOLUTIONS}"
 
-cd ../..
+if [[ "${LEN}" -eq 5 ]]; then
+  cd ..
+else
+  cd ../..
+fi
 
 if [[ "${OSTYPE}" == "msys" || "${OSTYPE}" == "cygwin" ]]
 then
