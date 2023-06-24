@@ -15,11 +15,11 @@ PACKAGE_TESTS="$2"
 CLASS_SOLUTIONS="$3"
 CLASS_TESTS="$4"
 
-if grep -qi microsoft /proc/version; then
-  SOURCE="${PWD}/"
-  cd ~ || exit 1
-else
-  SOURCE=""
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  if grep -qi microsoft /proc/version; then
+    SOURCE="${PWD}/"
+    cd ~ || exit 1
+  fi
 fi
 
 [[ ! -d "${PATH_RUNNER}"/ ]] && mkdir "${PATH_RUNNER}"/
